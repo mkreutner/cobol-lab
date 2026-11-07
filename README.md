@@ -86,6 +86,35 @@ Les sources sont en **format libre** (`-free`) : pas de contrainte de colonnes, 
 commentaires s'écrivent avec `*>`. Pour du code historique en format fixe, passe
 `format=fixed`.
 
+## Exercices (formation)
+
+Chaque exercice est un dossier `sources/app/exercices/NN_sujet/` :
+
+| Fichier       | Rôle                                                       |
+| ------------- | ---------------------------------------------------------- |
+| `lecon.md`    | les connaissances nécessaires pour faire le sujet          |
+| `sujet.md`    | l'énoncé                                                   |
+| `sujet.cob`   | le programme de départ (à corriger / compléter)            |
+| `solution.md` | le corrigé commenté — à ouvrir après avoir essayé          |
+
+Les exercices sont compilés en **format fixe** (`cobc -fixed`), comme le code
+legacy que l'on rencontre en maintenance ; `src/` reste en format libre.
+
+```bash
+just ex-list                 # exercices disponibles
+just ex-compile 01           # compile exercices/01_hello/sujet.cob → bin/01_hello_sujet
+just ex-run 01               # compile puis exécute
+just ex-check 01             # syntaxe seule
+just ex-run 01 libre         # autre fichier du dossier : exercices/01_hello/libre.cob
+```
+
+`01` ou `01_hello` sont acceptés indifféremment.
+
+Programme : 01 anatomie / format fixe · 02 PICTURE et structures · 03 arithmétique
+et édition · 04 contrôle (IF, EVALUATE, PERFORM, niveaux 88) · 05 tables (OCCURS,
+SEARCH) · 06 fichiers séquentiels · 07 état batch avec ruptures · 08 fichiers
+indexés · 09 sous-programmes (CALL, COPY) · 10 lecture de code legacy.
+
 ## Dépannage
 
 - **`Fichier .env manquant`** → `just setup`.

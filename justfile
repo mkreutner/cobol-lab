@@ -140,6 +140,52 @@ clean:
     rm -rf sources/app/{{bin}}/*
 
 # ---------------------------------------------------------------------------
+# Exercices (sources/app/exercices/NN_sujet/ : lecon.md, sujet.md, sujet.cob, solution.md)
+# Les exercices sont compilés en FORMAT FIXE (cobc -fixed), comme du code legacy.
+# `just ex-run 01` ou `just ex-run 01_hello` ; fichier alternatif : `just ex-run 01 libre`
+# ---------------------------------------------------------------------------
+
+ex_dir := "exercices"
+
+# Liste les exercices disponibles
+ex-list:
+    @ls -1d sources/app/{{ex_dir}}/*/ 2>/dev/null | xargs -rn1 basename || echo "(aucun exercice)"
+
+# Compile exercices/<ex>/<file>.cob (format fixe) → bin/<ex>_<file>
+ex-compile ex file="sujet": _need-env
+    #!/usr/bin/env bash
+    set -euo pipefail
+    dir=$(just _ex-dir "{{ex}}")
+    mkdir -p sources/app/{{bin}}
+    {{_run}} cobc -x -fixed -std={{cobc_std}} {{cobc_opts}} \
+        -o {{bin}}/${dir}_{{file}} {{ex_dir}}/${dir}/{{file}}.cob
+
+# Compile puis exécute exercices/<ex>/<file>.cob
+ex-run ex file="sujet" *args: (ex-compile ex file)
+    #!/usr/bin/env bash
+    set -euo pipefail
+    dir=$(just _ex-dir "{{ex}}")
+    {{_run}} ./{{bin}}/${dir}_{{file}} {{args}}
+
+# Vérifie la syntaxe de exercices/<ex>/<file>.cob sans produire de binaire
+ex-check ex file="sujet": _need-env
+    #!/usr/bin/env bash
+    set -euo pipefail
+    dir=$(just _ex-dir "{{ex}}")
+    {{_run}} cobc -fsyntax-only -fixed -std={{cobc_std}} {{cobc_opts}} \
+        {{ex_dir}}/${dir}/{{file}}.cob
+
+# Résout "01" ou "01_hello" vers le nom du dossier d'exercice
+_ex-dir ex:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    shopt -s nullglob
+    matches=(sources/app/{{ex_dir}}/{{ex}}*/)
+    if [ ${#matches[@]} -eq 0 ]; then echo "Aucun exercice ne correspond à '{{ex}}' (voir : just ex-list)" >&2; exit 1; fi
+    if [ ${#matches[@]} -gt 1 ]; then echo "Plusieurs exercices correspondent à '{{ex}}' : ${matches[*]}" >&2; exit 1; fi
+    basename "${matches[0]}"
+
+# ---------------------------------------------------------------------------
 # Interne
 # ---------------------------------------------------------------------------
 
