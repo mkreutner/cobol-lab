@@ -1,0 +1,27 @@
+# [PROJECT_ROOT_PATH]/docker-compose.yml
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+        USERNAME: ${USERNAME:-developer}
+    container_name: cobapp
+    hostname: cobapp
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./sources/app:/home/${USERNAME:-developer}/app
+    user: "${USERNAME:-developer}"
+    working_dir: "/home/${USERNAME:-developer}/app"
+    env_file:
+      - .env
+    networks:
+      - cobol-network
+
+networks:
+    cobol-network:
+      name: cobol-network-${ENVIRONMENT}
+      driver: bridge
