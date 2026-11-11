@@ -35,13 +35,13 @@
 000440     MOVE WS-ANNEE TO WS-AFF-ANNEE
 000450* 3. Demander le prenom de l'utilisateur 
 000460     DISPLAY "Votre prenom ? " WITH NO ADVANCING
-000470     ACCEPT  WS-PRENOM.
+000470     ACCEPT  WS-PRENOM
 000480* 4. Affichage des informations
 000490     DISPLAY "COBOL-LAB - exercice 01 - version " WS-VERSION
 000500     DISPLAY "Format fixe : attention aux colonnes !"
 000510     DISPLAY "Ce programme a ete ecrit avec la contrainte des 72 c
-000520-    "olonnes".
-000530     DISPLAY "Bonjour, " WS-PRENOM " !"
+000520-    "olonnes"
+000530     DISPLAY "Bonjour, " FUNCTION TRIM(WS-PRENOM) " !"
 000540     DISPLAY "Date du jour : " WS-DATE-FORMATEE
 000550* 5. Fin du programme
 000560     STOP RUN.
