@@ -17,7 +17,7 @@ Le code ancien utilise les verbes « en toutes lettres ». Leur piège : savoir
 | `ADD A B GIVING C`                         | C = A + B                |
 | `SUBTRACT A FROM B`                        | B = B − A                |
 | `SUBTRACT A FROM B GIVING C`               | C = B − A                |
-| `MULTIPLY A BY B`                          | **B** = A × B            |
+| `MULTIPLY A BY B`                          | B = A × B                |
 | `MULTIPLY A BY B GIVING C`                 | C = A × B                |
 | `DIVIDE A INTO B`                          | B = B / A                |
 | `DIVIDE A INTO B GIVING C`                 | C = B / A                |
